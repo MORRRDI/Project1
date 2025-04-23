@@ -1,0 +1,32 @@
+<a href="index.html">Главная</a>
+Здесь контакты
+<br><br><br>
+<button id="button_mashine" >Start machine</button>
+<br><br>
+<p id="text_changer"></p>
+<style>
+    a{
+        color: brown;
+    }
+</style>
+<!-- <script src="main.js"></script> -->
+<script>
+    let button = document.querySelector('#button_mashine')
+    let text = document.querySelector('#text_changer')
+    function updateBtn() {
+        if (button.textContent === "Start machine") {
+            function generateRandomString(length) {
+                return Math.random().toString(36).substring(2, length + 2);
+            }
+            text.textContent = generateRandomString(36);
+            button.textContent = "Stop machine";
+        } else {
+            text.textContent = "Машина остановлена.";
+            button.textContent = "Start machine";
+        }
+    }
+    button.addEventListener('click', updateBtn);
+
+    console.log(button)
+    console.log(text)
+</script>
