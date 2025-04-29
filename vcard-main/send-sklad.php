@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "UPDATE shoes SET qual = ? WHERE id = ?";
             $updateStmt = $conn->prepare($sql);
             $updateStmt->execute([$live_qual, $bd_id]);
-            header('Location: http://vcard-main/size.php');
+            header('Location: ./size.php');
             exit;
         }
     } else {
@@ -39,11 +39,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO shoes (type, size, qual) VALUES (?, ?, ?)";
         $insertStmt = $conn->prepare($sql);
         if ($insertStmt->execute([$type, $size, $qual])) {
-            header('Location: http://vcard-main/size.php');
+            header('Location: ./size.php');
             exit; 
         } else {
             echo 'Ошибка при добавлении товара: ' . implode(", ", $insertStmt->errorInfo());
         }
+    }   
+    if ($result = $conn->query($shoes)) {
+       
+        $rowClasses = ['table-info', 'table-warning', 'table-success', 'table-danger', 'table-primary'];
+        $rowCount = 0;
+    
+        foreach ($result as $row) {
+            $id = $row["id"];
+            $type = $row["type"];
+            $size = $row["size"];
+            $qual = $row["qual"];
+    
+        
+            $class = $rowClasses[$rowCount % count($rowClasses)];
+    
+            echo("<tr class='$class'>");
+            echo("<th scope='row'>$id</th>");
+            echo("<td>$type</td>");
+            echo("<td>$size</td>");
+            echo("<td>$qual</td>");
+            echo("<td><form action='send-sklad.php'><input type='hidden' name='id' value='$id'><input name='delete' type='submit' value='удалить'></form></td>");
+            echo("</tr>");
+    
+            $rowCount++;
+        }
     }
+    
 }
 ?>
